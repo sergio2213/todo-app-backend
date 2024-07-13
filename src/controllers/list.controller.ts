@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { createListService, createTodoService, deleteListService, deleteTodoService, getLists, getTodos, updateIsCompletedService, updateListService, updateTodoService } from '../services/list.service'
+import { createListService, createTodoService, deleteListService, deleteTodoService, getLists, getOneListService, getTodos, updateIsCompletedService, updateListService, updateTodoService } from '../services/list.service'
 
 export const fetchLists = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.user
@@ -16,6 +16,26 @@ export const fetchLists = async (req: Request, res: Response): Promise<void> => 
     ok: true,
     data: {
       todoLists
+    }
+  })
+}
+
+export const fetchOneList = async (req: Request, res: Response): Promise<void> => {
+  const listId = req.params.listId
+  const todoList = await getOneListService(listId)
+  if (todoList === null) {
+    res.status(500).json({
+      message: 'Internal server error',
+      ok: false
+    })
+    return
+  }
+  console.log(todoList)
+  res.status(200).json({
+    message: 'Success',
+    ok: true,
+    data: {
+      todoList
     }
   })
 }

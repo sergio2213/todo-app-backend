@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express'
-import { fetchLists, fetchTodos, createList, createTodo, updateList, updateTodo, deleteList, deleteTodo, updateIsCompleted } from '../controllers/list.controller'
+import { fetchLists, fetchTodos, createList, createTodo, updateList, updateTodo, deleteList, deleteTodo, updateIsCompleted, fetchOneList } from '../controllers/list.controller'
 import { verifyToken } from '../middlewares/verifyToken'
 import { authorizeListAccess } from '../middlewares/authorizeListAccess'
 import { authorizeTodoAccess } from '../middlewares/authorizeTodoAccess'
@@ -8,6 +8,7 @@ const router = Router()
 
 router.post('/', verifyToken, createList as RequestHandler)
 router.get('/', verifyToken, fetchLists as RequestHandler)
+router.get('/:listId', verifyToken, fetchOneList as RequestHandler)
 router.get('/:listId/todos', verifyToken, authorizeListAccess as RequestHandler, fetchTodos as RequestHandler)
 router.post('/:listId/todos', verifyToken, authorizeListAccess as RequestHandler, createTodo as RequestHandler)
 router.patch('/:listId', verifyToken, authorizeListAccess as RequestHandler, updateList as RequestHandler)

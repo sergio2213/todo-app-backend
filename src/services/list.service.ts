@@ -28,6 +28,30 @@ export const getLists = async (id: string): Promise<TodoList[] | null> => {
   }
 }
 
+export const getOneListService = async (id: string): Promise<TodoList | null> => {
+  try {
+    const sql = 'SELECT * FROM todolists WHERE list_id = ?'
+    const values = [id]
+    const [rows] = await pool.query<TodoListRow[]>(sql, values)
+    if (rows.length === 1) {
+      const todoListRow = rows[0]
+      const list: TodoList = {
+        id: todoListRow.list_id,
+        userId: todoListRow.user_id,
+        title: todoListRow.title,
+        description: todoListRow.description
+      }
+      return list
+    }
+    return null
+  } catch (err) {
+    if (err instanceof Error) {
+      console.log(err.message)
+    }
+    return null
+  }
+}
+
 export const getTodos = async (id: string): Promise<Todo[] | null> => {
   try {
     const sql = 'SELECT * FROM todos where list_id = ?'
